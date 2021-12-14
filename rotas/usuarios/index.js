@@ -64,4 +64,21 @@ usuariosRoteador.put('/:idUsuario', async (req, res) => {
         )
     }
 })
+
+usuariosRoteador.delete('/:idUsuario', async (req, res) => {
+    try{
+        const id = req.params.idUsuario
+        const usuario = new Usuario({id: id})
+        await usuario.consultarPorId()
+        await usuario.deletar()
+        res.send(
+            JSON.stringify("Dado apagado com sucesso!")
+        )
+        res.end()
+    }catch (erro) {
+        res.send(
+            {mensagem: erro.message}
+        )
+    }
+})
 module.exports = usuariosRoteador

@@ -55,6 +55,10 @@ class Jogo {
 
         await TabelaJogo.atualizar(this.id, dadosParaAtualizar)
     }
+
+    deletar(){
+        return TabelaJogo.deletar(this.id)
+    }
 }
 
 module.exports = Jogo

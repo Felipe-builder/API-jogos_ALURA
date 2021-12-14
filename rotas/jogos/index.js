@@ -62,4 +62,20 @@ jogosRoteador.put('/:idJogo', async (req, res) => {
     }
 })
 
+jogosRoteador.delete('/:idJogo', async (req, res) => {
+    try {
+        const id = req.params.idJogo
+        const jogo = new Jogo({id: id})
+        await TabelaJogo.consultarPorId(id)
+        await jogo.deletar()
+        res.end()
+    } catch(erro) {
+        res.send(
+            JSON.stringify({
+                mensagem: erro.message
+            })
+        )
+    }
+})
+
 module.exports = jogosRoteador

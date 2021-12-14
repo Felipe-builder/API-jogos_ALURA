@@ -52,6 +52,10 @@ class Usuario {
         await TabelaUsuario.atualizar(this.id, dadosParaAtualizar)
 
     }
+
+    deletar() {
+        return TabelaUsuario.deletar(this.id)
+    }
 }
 
 module.exports = Usuario
