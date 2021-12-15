@@ -1,3 +1,4 @@
+const { Error } = require('sequelize/dist')
 const TabelaJogo = require('./TabelaJogo')
 
 class Jogo {
@@ -13,6 +14,7 @@ class Jogo {
     }
 
     async criar () {
+        this.validar()
         const resultado = await TabelaJogo.inserir({
             nome: this.nome,
             preco: this.preco,
@@ -58,6 +60,17 @@ class Jogo {
 
     deletar(){
         return TabelaJogo.deletar(this.id)
+    }
+
+    validar() {
+        const campos = ['nome', 'preco', 'categoria', 'plataforma']
+
+        campos.forEach(campo => {
+            const valor = this[campo]
+            if(!typeof valor !== 'string' || valor.length === 0) {
+                throw new Error(`O campo "${campo}" está inválido`)
+            }
+        })
     }
 }
 

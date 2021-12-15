@@ -10,6 +10,7 @@ jogosRoteador.post('/', async (req, res) => {
         // }
         const jogo = new Jogo(dadosRecebidos)
         await jogo.criar()
+        res.status(201)
         res.send(
             JSON.stringify(req.body)
         )
@@ -20,6 +21,7 @@ jogosRoteador.post('/', async (req, res) => {
 
 jogosRoteador.get('/', async (req, res) => {
     const resultados = await TabelaJogo.listar()
+    res.status(200)
     res.send(
         JSON.stringify(resultados)
     )
@@ -30,6 +32,7 @@ jogosRoteador.get('/:idJogo', async (req, res) => {
         const id = req.params.idJogo
         const jogo = new Jogo({ id: id})
         await jogo.carregar()
+        res.status(200)
         res.send(
             JSON.stringify(jogo)
         )
@@ -49,9 +52,7 @@ jogosRoteador.put('/:idJogo', async (req, res) => {
         const dados = Object.assign({}, dadosRecebidos, { id: id})
         const jogo = new Jogo(dados)
         await jogo.atualizar()
-        res.send(
-            JSON.stringify("Atualizado com Sucesso!")
-        )
+        res.status(204)
         res.end()
     } catch (erro) {
         res.send(
@@ -68,6 +69,7 @@ jogosRoteador.delete('/:idJogo', async (req, res) => {
         const jogo = new Jogo({id: id})
         await TabelaJogo.consultarPorId(id)
         await jogo.deletar()
+        res.status(204)
         res.end()
     } catch(erro) {
         res.send(

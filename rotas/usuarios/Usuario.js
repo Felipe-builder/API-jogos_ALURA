@@ -12,6 +12,7 @@ class Usuario {
     }
 
     async criar () {
+        this.validar()
         const resultado = TabelaUsuario.inserir({
             nome: this.nome,
             idade: this.idade,
@@ -55,6 +56,17 @@ class Usuario {
 
     deletar() {
         return TabelaUsuario.deletar(this.id)
+    }
+
+    validar() {
+        const campos = ['nome', 'idade', 'saldo']
+
+        campos.forEach(campo => {
+            const valor = this[campo]
+            if(!typeof valor !== 'string' || valor.length === 0){
+                throw new Error(`O campo "${campo}" está inválido`)
+            }
+        })
     }
 }
 

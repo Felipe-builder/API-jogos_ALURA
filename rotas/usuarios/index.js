@@ -7,6 +7,7 @@ usuariosRoteador.post('/', async (req, res) => {
         const dadosRecebidos = req.body
         const usuario = new Usuario(dadosRecebidos)
         await usuario.criar()
+        res.status(201)
         res.send(
             JSON.stringify(req.body)
         )
@@ -22,6 +23,7 @@ usuariosRoteador.post('/', async (req, res) => {
 usuariosRoteador.get('/', async (req, res) => {
     try {
         const resultados = await TabelaUsuario.listar()
+        res.status(200)
         res.send(
             JSON.stringify(resultados)
         )
@@ -37,6 +39,7 @@ usuariosRoteador.get('/:idUsuario', async (req, res) => {
         const id = req.params.idUsuario
         const usuario = new Usuario({ id: id})
         await usuario.consultarPorId()
+        res.status(200)
         res.send(
             JSON.stringify(usuario)
         )
@@ -54,9 +57,7 @@ usuariosRoteador.put('/:idUsuario', async (req, res) => {
         const dados = Object.assign({}, dadosRecebidos, {id: id})
         const usuario = new Usuario(dados)
         await usuario.atualizar()
-        res.send(
-            JSON.stringify("dados Atualizados")
-        )
+        res.status(204)
         res.end()
     } catch (erro) {
         res.send(
@@ -71,9 +72,7 @@ usuariosRoteador.delete('/:idUsuario', async (req, res) => {
         const usuario = new Usuario({id: id})
         await usuario.consultarPorId()
         await usuario.deletar()
-        res.send(
-            JSON.stringify("Dado apagado com sucesso!")
-        )
+        res.status(204)
         res.end()
     }catch (erro) {
         res.send(
