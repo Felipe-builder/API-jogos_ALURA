@@ -15,6 +15,7 @@ jogosRoteador.post('/', async (req, res) => {
             JSON.stringify(req.body)
         )
     } catch (erro) {
+        res.status(400)
         res.send(JSON.stringify({ mensagem: erro.message }))
     }
 })
@@ -37,6 +38,7 @@ jogosRoteador.get('/:idJogo', async (req, res) => {
             JSON.stringify(jogo)
         )
     } catch (erro) {
+        res.status(404)
         res.send(
             JSON.stringify({
                 mensagem: erro.message
@@ -55,6 +57,7 @@ jogosRoteador.put('/:idJogo', async (req, res) => {
         res.status(204)
         res.end()
     } catch (erro) {
+        res.status(404)
         res.send(
             JSON.stringify({
                 mensagem: erro.message
@@ -72,6 +75,7 @@ jogosRoteador.delete('/:idJogo', async (req, res) => {
         res.status(204)
         res.end()
     } catch(erro) {
+        res.status(404)
         res.send(
             JSON.stringify({
                 mensagem: erro.message

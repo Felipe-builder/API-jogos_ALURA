@@ -12,6 +12,7 @@ usuariosRoteador.post('/', async (req, res) => {
             JSON.stringify(req.body)
         )
     } catch (erro) {
+        res.status(400)
         res.send(
             JSON.stringify(
                 { mensagem: erro.message }
@@ -21,17 +22,11 @@ usuariosRoteador.post('/', async (req, res) => {
 })
 
 usuariosRoteador.get('/', async (req, res) => {
-    try {
-        const resultados = await TabelaUsuario.listar()
-        res.status(200)
-        res.send(
-            JSON.stringify(resultados)
-        )
-    } catch(erro) {
-        res.send(
-            {mensagem: erro.message}
-        )
-    }
+    const resultados = await TabelaUsuario.listar()
+    res.status(200)
+    res.send(
+        JSON.stringify(resultados)
+    )
 })
 
 usuariosRoteador.get('/:idUsuario', async (req, res) => {
@@ -44,6 +39,7 @@ usuariosRoteador.get('/:idUsuario', async (req, res) => {
             JSON.stringify(usuario)
         )
     } catch(erro) {
+        res.status(404)
         res.send(
             {mensagem: erro.message}
         )
@@ -60,6 +56,7 @@ usuariosRoteador.put('/:idUsuario', async (req, res) => {
         res.status(204)
         res.end()
     } catch (erro) {
+        res.status(404)
         res.send(
             {mensagem: erro.message}
         )
@@ -75,6 +72,7 @@ usuariosRoteador.delete('/:idUsuario', async (req, res) => {
         res.status(204)
         res.end()
     }catch (erro) {
+        res.status(404)
         res.send(
             {mensagem: erro.message}
         )
