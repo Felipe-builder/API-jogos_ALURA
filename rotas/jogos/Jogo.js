@@ -1,4 +1,6 @@
 const { Error } = require('sequelize/dist')
+const CampoInvalido = require('../../erros/CampoInvalido')
+const DadosNaoFornecidos = require('../../erros/DadosNaoFornecidos')
 const TabelaJogo = require('./TabelaJogo')
 
 class Jogo {
@@ -52,7 +54,7 @@ class Jogo {
         })
 
         if(Object.keys(dadosParaAtualizar).length === 0) {
-            throw new Error('Não foram fornecidos dados para atualizar!')
+            throw new DadosNaoFornecidos()
         }
 
         await TabelaJogo.atualizar(this.id, dadosParaAtualizar)
@@ -68,7 +70,7 @@ class Jogo {
         campos.forEach(campo => {
             const valor = this[campo]
             if(typeof valor !== 'string' || valor.length === 0) {
-                throw new Error(`O campo "${campo}" está inválido`)
+                throw new CampoInvalido(campo)
             }
         })
     }

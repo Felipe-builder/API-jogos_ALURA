@@ -1,4 +1,5 @@
 const Modelo = require('./ModeloTabelaJogo')
+const NaoEncontrado = require('../../erros/NaoEncontrado')
 
 module.exports = {
     listar () {
@@ -15,7 +16,7 @@ module.exports = {
         })
 
         if (!encontrado) {
-            throw new Error('Jogo não encontrado!')
+            throw new NaoEncontrado('Jogo')
         }
 
         return encontrado

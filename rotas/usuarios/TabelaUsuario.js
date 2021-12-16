@@ -1,3 +1,4 @@
+const NaoEncontrado = require('../../erros/NaoEncontrado')
 const Modelo = require('./ModeloTabelaUsuario')
 
 module.exports = {
@@ -15,7 +16,7 @@ module.exports = {
         })
 
         if(!encontrado) {
-            throw new Error("Usuario não encontrado")
+            throw new NaoEncontrado("Usuário")
         }
 
         return encontrado

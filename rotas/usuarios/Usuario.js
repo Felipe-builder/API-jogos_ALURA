@@ -1,3 +1,5 @@
+const DadosNaoFornecidos = require('../../erros/DadosNaoFornecidos')
+const NaoEncontrado = require('../../erros/NaoEncontrado')
 const TabelaUsuario = require('./TabelaUsuario')
 
 class Usuario {
@@ -47,7 +49,7 @@ class Usuario {
         })
 
         if(Object.keys(dadosParaAtualizar).length === 0) {
-            throw new Error('Não foram fornecidos dados para atualizar')
+            throw new DadosNaoFornecidos()
         }
 
         await TabelaUsuario.atualizar(this.id, dadosParaAtualizar)
@@ -64,7 +66,7 @@ class Usuario {
         campos.forEach(campo => {
             const valor = this[campo]
             if(typeof valor !== 'string' || valor.length === 0){
-                throw new Error(`O campo "${campo}" está inválido`)
+                throw new NaoEncontrado(campo)
             }
         })
     }

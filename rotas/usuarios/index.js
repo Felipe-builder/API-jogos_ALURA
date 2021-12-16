@@ -2,7 +2,7 @@ const usuariosRoteador = require('express').Router()
 const TabelaUsuario = require('./TabelaUsuario')
 const Usuario = require('./Usuario') 
 
-usuariosRoteador.post('/', async (req, res) => {
+usuariosRoteador.post('/', async (req, res, proximo) => {
     try {
         const dadosRecebidos = req.body
         const usuario = new Usuario(dadosRecebidos)
@@ -12,12 +12,7 @@ usuariosRoteador.post('/', async (req, res) => {
             JSON.stringify(req.body)
         )
     } catch (erro) {
-        res.status(400)
-        res.send(
-            JSON.stringify(
-                { mensagem: erro.message }
-            )
-        )
+        proximo(erro)
     }
 })
 
@@ -29,7 +24,7 @@ usuariosRoteador.get('/', async (req, res) => {
     )
 })
 
-usuariosRoteador.get('/:idUsuario', async (req, res) => {
+usuariosRoteador.get('/:idUsuario', async (req, res, proximo) => {
     try {
         const id = req.params.idUsuario
         const usuario = new Usuario({ id: id})
@@ -39,14 +34,11 @@ usuariosRoteador.get('/:idUsuario', async (req, res) => {
             JSON.stringify(usuario)
         )
     } catch(erro) {
-        res.status(404)
-        res.send(
-            {mensagem: erro.message}
-        )
+        proximo(erro)
     }
 })
 
-usuariosRoteador.put('/:idUsuario', async (req, res) => {
+usuariosRoteador.put('/:idUsuario', async (req, res, proximo) => {
     try {
         const id = req.params.idUsuario
         const dadosRecebidos = req.body
@@ -56,14 +48,11 @@ usuariosRoteador.put('/:idUsuario', async (req, res) => {
         res.status(204)
         res.end()
     } catch (erro) {
-        res.status(404)
-        res.send(
-            {mensagem: erro.message}
-        )
+        proximo(erro)
     }
 })
 
-usuariosRoteador.delete('/:idUsuario', async (req, res) => {
+usuariosRoteador.delete('/:idUsuario', async (req, res, proximo) => {
     try{
         const id = req.params.idUsuario
         const usuario = new Usuario({id: id})
@@ -72,10 +61,7 @@ usuariosRoteador.delete('/:idUsuario', async (req, res) => {
         res.status(204)
         res.end()
     }catch (erro) {
-        res.status(404)
-        res.send(
-            {mensagem: erro.message}
-        )
+        proximo(erro)
     }
 })
 module.exports = usuariosRoteador

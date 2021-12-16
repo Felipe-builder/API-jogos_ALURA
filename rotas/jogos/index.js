@@ -1,8 +1,9 @@
 const jogosRoteador = require('express').Router()
 const TabelaJogo = require('./TabelaJogo')
 const Jogo = require('./Jogo')
+const NaoEncontrado = require('../../erros/NaoEncontrado')
 
-jogosRoteador.post('/', async (req, res) => {
+jogosRoteador.post('/', async (req, res, proximo) => {
     try {
         const dadosRecebidos = req.body
         // if(!req.body.nome || !req.body.plataforma) {
@@ -15,8 +16,7 @@ jogosRoteador.post('/', async (req, res) => {
             JSON.stringify(req.body)
         )
     } catch (erro) {
-        res.status(400)
-        res.send(JSON.stringify({ mensagem: erro.message }))
+        proximo(erro)
     }
 })
 
@@ -28,7 +28,7 @@ jogosRoteador.get('/', async (req, res) => {
     )
 })
 
-jogosRoteador.get('/:idJogo', async (req, res) => {
+jogosRoteador.get('/:idJogo', async (req, res, proximo) => {
     try {
         const id = req.params.idJogo
         const jogo = new Jogo({ id: id})
@@ -38,16 +38,11 @@ jogosRoteador.get('/:idJogo', async (req, res) => {
             JSON.stringify(jogo)
         )
     } catch (erro) {
-        res.status(404)
-        res.send(
-            JSON.stringify({
-                mensagem: erro.message
-            })
-        )
+        proximo(erro)
     }
 })
 
-jogosRoteador.put('/:idJogo', async (req, res) => {
+jogosRoteador.put('/:idJogo', async (req, res, proximo) => {
     try {
         const id = req.params.idJogo
         const dadosRecebidos = req.body
@@ -57,16 +52,11 @@ jogosRoteador.put('/:idJogo', async (req, res) => {
         res.status(204)
         res.end()
     } catch (erro) {
-        res.status(404)
-        res.send(
-            JSON.stringify({
-                mensagem: erro.message
-            })
-        )
+        proximo(erro)
     }
 })
 
-jogosRoteador.delete('/:idJogo', async (req, res) => {
+jogosRoteador.delete('/:idJogo', async (req, res, proximo) => {
     try {
         const id = req.params.idJogo
         const jogo = new Jogo({id: id})
@@ -75,12 +65,7 @@ jogosRoteador.delete('/:idJogo', async (req, res) => {
         res.status(204)
         res.end()
     } catch(erro) {
-        res.status(404)
-        res.send(
-            JSON.stringify({
-                mensagem: erro.message
-            })
-        )
+        proximo(erro)
     }
 })
 
