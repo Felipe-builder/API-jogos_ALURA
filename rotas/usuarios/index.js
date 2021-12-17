@@ -1,6 +1,7 @@
 const usuariosRoteador = require('express').Router()
 const TabelaUsuario = require('./TabelaUsuario')
 const Usuario = require('./Usuario') 
+const SerializadorUsuario = require('../../Serializador').SerializadorUsuario
 
 usuariosRoteador.post('/', async (req, res, proximo) => {
     try {
@@ -8,8 +9,11 @@ usuariosRoteador.post('/', async (req, res, proximo) => {
         const usuario = new Usuario(dadosRecebidos)
         await usuario.criar()
         res.status(201)
+        const serializador = new SerializadorUsuario(
+            res.getHeader('Content-Type')
+        )
         res.send(
-            JSON.stringify(req.body)
+            serializador.serializar(usuario)
         )
     } catch (erro) {
         proximo(erro)
@@ -19,8 +23,11 @@ usuariosRoteador.post('/', async (req, res, proximo) => {
 usuariosRoteador.get('/', async (req, res) => {
     const resultados = await TabelaUsuario.listar()
     res.status(200)
+    const serializador = new SerializadorUsuario(
+        res.getHeader('Content-Type')
+    )
     res.send(
-        JSON.stringify(resultados)
+        serializador.serializar(resultados)
     )
 })
 
@@ -30,8 +37,11 @@ usuariosRoteador.get('/:idUsuario', async (req, res, proximo) => {
         const usuario = new Usuario({ id: id})
         await usuario.consultarPorId()
         res.status(200)
+        const serializador = new SerializadorUsuario(
+            res.getHeader('Content-Type')
+        )
         res.send(
-            JSON.stringify(usuario)
+            serializador.serializar(usuario)
         )
     } catch(erro) {
         proximo(erro)

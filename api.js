@@ -5,8 +5,27 @@ const config = require('config')
 const NaoEncontrado = require('./erros/NaoEncontrado')
 const CampoInvalido = require('./erros/CampoInvalido')
 const DadosNaoFornecidos = require('./erros/DadosNaoFornecidos')
+const ValorNaoSuportado = require('./erros/ValorNaoSuportado')
+const formatosAceitos = require('./Serializador').formatosAceitos
 
 app.use(bodyParse.json())
+
+app.use((req, res, proximo) => {
+    const formatoRequisitado = req.header('Accept')
+
+    if(formatoRequisitado === '*/*') {
+        formatoRequisitado = 'application/json'
+    }
+
+    if (formatosAceitos.indexOf(formatoRequisitado) === -1) {
+        res.status(406)
+        res.end()
+        return
+    }
+
+    res.setHeader('Content-Type', formatoRequisitado)
+    proximo()
+})
 
 const jogosRoteador = require('./rotas/jogos')
 const usuariosRoteado = require('./rotas/usuarios')
@@ -23,6 +42,10 @@ app.use((erro, req, res, proximo) => {
         status = 400
     }
     
+    if (erro instanceof ValorNaoSuportado) {
+        status = 406
+    }
+
     res.status(status)
 
     res.send(
