@@ -11,7 +11,7 @@ const formatosAceitos = require('./Serializador').formatosAceitos
 app.use(bodyParse.json())
 
 app.use((req, res, proximo) => {
-    const formatoRequisitado = req.header('Accept')
+    let formatoRequisitado = req.header('Accept')
 
     if(formatoRequisitado === '*/*') {
         formatoRequisitado = 'application/json'
@@ -32,6 +32,7 @@ const usuariosRoteado = require('./rotas/usuarios')
 
 app.use('/api/jogos', jogosRoteador)
 app.use('/api/usuarios', usuariosRoteado)
+
 app.use((erro, req, res, proximo) => {
     let status = 500
     if (erro instanceof NaoEncontrado) {
