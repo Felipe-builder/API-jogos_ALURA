@@ -1,3 +1,4 @@
+const CampoInvalido = require('../../erros/CampoInvalido')
 const DadosNaoFornecidos = require('../../erros/DadosNaoFornecidos')
 const NaoEncontrado = require('../../erros/NaoEncontrado')
 const TabelaUsuario = require('./TabelaUsuario')
@@ -15,7 +16,7 @@ class Usuario {
 
     async criar () {
         this.validar()
-        const resultado = TabelaUsuario.inserir({
+        const resultado = await TabelaUsuario.inserir({
             nome: this.nome,
             idade: this.idade,
             saldo: this.saldo
@@ -38,15 +39,19 @@ class Usuario {
 
     async atualizar() {
         await TabelaUsuario.consultarPorId(this.id)
-        const campos = ['nome', 'idade', 'saldo']
         const dadosParaAtualizar = {}
 
-        campos.forEach((campo) => {
-            const valor = this[campo]
-            if(typeof valor === 'string' && valor.length > 0 ) {
-                dadosParaAtualizar[campo] = valor
-            }
-        })
+        if (typeof this.nome === 'string' && this.nome.length > 0){
+            dadosParaAtualizar.nome = this.nome
+        }
+
+        if (typeof this.idade === 'number' && this.idade > 0) {
+            dadosParaAtualizar.idade = this.idade
+        }
+
+        if (typeof this.saldo === 'number' && this.saldo >= 0) {
+            dadosParaAtualizar.saldo = this.saldo
+        }
 
         if(Object.keys(dadosParaAtualizar).length === 0) {
             throw new DadosNaoFornecidos()
@@ -61,14 +66,18 @@ class Usuario {
     }
 
     validar() {
-        const campos = ['nome', 'idade', 'saldo']
+        if(typeof this.nome !== 'string' || this.nome.length === 0) {
+            throw new CampoInvalido('nome')
+        }
 
-        campos.forEach(campo => {
-            const valor = this[campo]
-            if(typeof valor !== 'string' || valor.length === 0){
-                throw new NaoEncontrado(campo)
-            }
-        })
+        if(typeof this.idade !== 'number' || this.idade === 0) {
+            throw new CampoInvalido('idade')
+        }
+
+        if(typeof this.saldo !== 'number' || this.saldo < 0) {
+            throw new CampoInvalido('saldo')
+        }
+
     }
 }
 

@@ -43,7 +43,7 @@ class Jogo {
 
     async atualizar() {
         await TabelaJogo.consultarPorId(this.id)
-        const campos = ['nome', 'preco', 'categoria', 'plataforma']
+        const campos = ['nome', 'categoria', 'plataforma']
         const dadosParaAtualizar = {}
 
         campos.forEach((campo) => {
@@ -52,6 +52,10 @@ class Jogo {
                 dadosParaAtualizar[campo] = valor
             }
         })
+
+        if(typeof this.preco === 'number' && this.preco > 0) {
+            dadosParaAtualizar.preco = this.preco;
+        }
 
         if(Object.keys(dadosParaAtualizar).length === 0) {
             throw new DadosNaoFornecidos()
@@ -65,7 +69,7 @@ class Jogo {
     }
 
     validar() {
-        const campos = ['nome', 'preco', 'categoria', 'plataforma']
+        const campos = ['nome', 'categoria', 'plataforma']
 
         campos.forEach(campo => {
             const valor = this[campo]
@@ -73,6 +77,10 @@ class Jogo {
                 throw new CampoInvalido(campo)
             }
         })
+
+        if(typeof this.preco !== 'number' || this.preco.length === 0) {
+            throw new CampoInvalido('preco');
+        }
     }
 }
 

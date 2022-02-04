@@ -2,18 +2,19 @@ const jogosRoteador = require('express').Router()
 const TabelaJogo = require('./TabelaJogo')
 const Jogo = require('./Jogo')
 const NaoEncontrado = require('../../erros/NaoEncontrado')
+const SerializadorJogo = require('../../Serializador').SerializadorJogo
 
 jogosRoteador.post('/', async (req, res, proximo) => {
     try {
         const dadosRecebidos = req.body
-        // if(!req.body.nome || !req.body.plataforma) {
-        //     throw new Error('Campos inválidos!')
-        // }
         const jogo = new Jogo(dadosRecebidos)
         await jogo.criar()
         res.status(201)
+        const serializador = new SerializadorJogo(
+            res.getHeader('Content-Type')
+        )
         res.send(
-            JSON.stringify(req.body)
+            serializador.serializar(jogo)
         )
     } catch (erro) {
         proximo(erro)
@@ -23,8 +24,11 @@ jogosRoteador.post('/', async (req, res, proximo) => {
 jogosRoteador.get('/', async (req, res) => {
     const resultados = await TabelaJogo.listar()
     res.status(200)
+    const serializador = new SerializadorJogo(
+        res.getHeader('Content-Type')
+    )
     res.send(
-        JSON.stringify(resultados)
+        serializador.serializar(resultados)
     )
 })
 
@@ -34,8 +38,11 @@ jogosRoteador.get('/:idJogo', async (req, res, proximo) => {
         const jogo = new Jogo({ id: id})
         await jogo.carregar()
         res.status(200)
+        const serializador = new SerializadorJogo(
+            res.getHeader('Content-Type')
+        )
         res.send(
-            JSON.stringify(jogo)
+            serializador.serializar(jogo)
         )
     } catch (erro) {
         proximo(erro)
