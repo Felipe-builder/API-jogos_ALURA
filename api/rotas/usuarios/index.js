@@ -10,7 +10,8 @@ usuariosRoteador.post('/', async (req, res, proximo) => {
         await usuario.criar()
         res.status(201)
         const serializador = new SerializadorUsuario(
-            res.getHeader('Content-Type')
+            res.getHeader('Content-Type'),
+            [ 'saldo', 'dtCriacao', 'dtAtualizacao', 'versao' ]
         )
         res.send(
             serializador.serializar(usuario)
@@ -38,7 +39,8 @@ usuariosRoteador.get('/:idUsuario', async (req, res, proximo) => {
         await usuario.consultarPorId()
         res.status(200)
         const serializador = new SerializadorUsuario(
-            res.getHeader('Content-Type')
+            res.getHeader('Content-Type'),
+            [ 'saldo', 'dtCriacao', 'dtAtualizacao', 'versao' ]
         )
         res.send(
             serializador.serializar(usuario)

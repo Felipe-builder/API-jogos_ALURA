@@ -11,7 +11,8 @@ jogosRoteador.post('/', async (req, res, proximo) => {
         await jogo.criar()
         res.status(201)
         const serializador = new SerializadorJogo(
-            res.getHeader('Content-Type')
+            res.getHeader('Content-Type'), 
+            [ 'categoria', 'plataforma', 'dtCriacao', 'dtAtualizacao', 'versao' ]
         )
         res.send(
             serializador.serializar(jogo)
@@ -39,7 +40,8 @@ jogosRoteador.get('/:idJogo', async (req, res, proximo) => {
         await jogo.carregar()
         res.status(200)
         const serializador = new SerializadorJogo(
-            res.getHeader('Content-Type')
+            res.getHeader('Content-Type'), 
+            [ 'categoria', 'plataforma', 'dtCriacao', 'dtAtualizacao', 'versao' ]
         )
         res.send(
             serializador.serializar(jogo)
