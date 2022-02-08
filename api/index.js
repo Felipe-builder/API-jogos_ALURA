@@ -28,10 +28,10 @@ app.use((req, res, proximo) => {
     proximo()
 })
 
-const jogosRoteador = require('./rotas/jogos')
+const plataformasRoteador = require('./rotas/plataformas')
 const usuariosRoteado = require('./rotas/usuarios')
 
-app.use('/api/jogos', jogosRoteador)
+app.use('/api/plataformas', plataformasRoteador)
 app.use('/api/usuarios', usuariosRoteado)
 
 app.use((erro, req, res, proximo) => {

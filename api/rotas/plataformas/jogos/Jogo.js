@@ -1,6 +1,6 @@
 const { Error } = require('sequelize/dist')
-const CampoInvalido = require('../../erros/CampoInvalido')
-const DadosNaoFornecidos = require('../../erros/DadosNaoFornecidos')
+const CampoInvalido = require('../../../erros/CampoInvalido')
+const DadosNaoFornecidos = require('../../../erros/DadosNaoFornecidos')
 const TabelaJogo = require('./TabelaJogo')
 
 class Jogo {

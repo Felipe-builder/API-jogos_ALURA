@@ -1,8 +1,8 @@
 const jogosRoteador = require('express').Router()
 const TabelaJogo = require('./TabelaJogo')
 const Jogo = require('./Jogo')
-const NaoEncontrado = require('../../erros/NaoEncontrado')
-const SerializadorJogo = require('../../Serializador').SerializadorJogo
+const NaoEncontrado = require('../../../erros/NaoEncontrado')
+const SerializadorJogo = require('../../../Serializador').SerializadorJogo
 
 jogosRoteador.post('/', async (req, res, proximo) => {
     try {

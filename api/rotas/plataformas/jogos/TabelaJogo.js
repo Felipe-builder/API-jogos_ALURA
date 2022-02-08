@@ -1,5 +1,5 @@
 const Modelo = require('./ModeloTabelaJogo')
-const NaoEncontrado = require('../../erros/NaoEncontrado')
+const NaoEncontrado = require('../../../erros/NaoEncontrado')
 
 module.exports = {
     listar () {

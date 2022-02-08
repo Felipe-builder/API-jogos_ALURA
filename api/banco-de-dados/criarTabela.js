@@ -1,4 +1,4 @@
-const ModeloTabelaJogo = require('../rotas/jogos/ModeloTabelaJogo') 
+const ModeloTabelaJogo = require('../rotas/plataformas/jogos/ModeloTabelaJogo') 
 const ModeloTabelaUsuario = require('../rotas/usuarios/ModeloTabelaUsuario')
 
 // ModeloTabelaJogo
