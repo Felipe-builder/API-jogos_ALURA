@@ -15,7 +15,12 @@ const colunas = {
         allowNull: false
     },
     plataforma: {
-        type: Sequelize.ENUM('Plastation', 'X-Box', 'Steam', 'PlayStore', 'AppleStore')
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: require('../ModeloTabelaPlataforma'),
+            key: 'id'
+        }
     }
 }
 
