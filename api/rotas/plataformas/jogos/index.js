@@ -1,13 +1,15 @@
-const jogosRoteador = require('express').Router()
+const roteador = require('express').Router({ mergeParams: true})
 const TabelaJogo = require('./TabelaJogo')
 const Jogo = require('./Jogo')
 const NaoEncontrado = require('../../../erros/NaoEncontrado')
 const SerializadorJogo = require('../../../Serializador').SerializadorJogo
 
-jogosRoteador.post('/', async (req, res, proximo) => {
+roteador.post('/', async (req, res, proximo) => {
     try {
+        const idPlataforma = req.params.idPlataforma
         const dadosRecebidos = req.body
-        const jogo = new Jogo(dadosRecebidos)
+        const dados = Object.assign({}, dadosRecebidos, { plataforma: idPlataforma })
+        const jogo = new Jogo(dados)
         await jogo.criar()
         res.status(201)
         const serializador = new SerializadorJogo(
@@ -15,15 +17,16 @@ jogosRoteador.post('/', async (req, res, proximo) => {
             [ 'categoria', 'plataforma', 'dtCriacao', 'dtAtualizacao', 'versao' ]
         )
         res.send(
-            serializador.serializar(jogo)
+            JSON.stringify(jogo)
         )
     } catch (erro) {
         proximo(erro)
     }
 })
 
-jogosRoteador.get('/', async (req, res) => {
-    const resultados = await TabelaJogo.listar()
+roteador.get('/', async (req, res) => {
+    console.log(req.params.idPlataforma)
+    const resultados = await TabelaJogo.listar(req.params.idPlataforma)
     res.status(200)
     const serializador = new SerializadorJogo(
         res.getHeader('Content-Type')
@@ -33,7 +36,7 @@ jogosRoteador.get('/', async (req, res) => {
     )
 })
 
-jogosRoteador.get('/:idJogo', async (req, res, proximo) => {
+roteador.get('/:idJogo', async (req, res, proximo) => {
     try {
         const id = req.params.idJogo
         const jogo = new Jogo({ id: id})
@@ -51,7 +54,7 @@ jogosRoteador.get('/:idJogo', async (req, res, proximo) => {
     }
 })
 
-jogosRoteador.put('/:idJogo', async (req, res, proximo) => {
+roteador.put('/:idJogo', async (req, res, proximo) => {
     try {
         const id = req.params.idJogo
         const dadosRecebidos = req.body
@@ -65,7 +68,7 @@ jogosRoteador.put('/:idJogo', async (req, res, proximo) => {
     }
 })
 
-jogosRoteador.delete('/:idJogo', async (req, res, proximo) => {
+roteador.delete('/:idJogo', async (req, res, proximo) => {
     try {
         const id = req.params.idJogo
         const jogo = new Jogo({id: id})
@@ -78,4 +81,4 @@ jogosRoteador.delete('/:idJogo', async (req, res, proximo) => {
     }
 })
 
-module.exports = jogosRoteador
+module.exports = roteador

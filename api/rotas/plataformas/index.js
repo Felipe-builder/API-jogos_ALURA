@@ -65,6 +65,6 @@ roteador.delete('/:id', async (req, res, proximo) => {
 })
 
 const roteadorJogos = require('./jogos')
-roteador.use('/:idPlataformas', roteadorJogos)
+roteador.use('/:idPlataforma/jogos', roteadorJogos)
 
 module.exports = roteador

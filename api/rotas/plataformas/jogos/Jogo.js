@@ -22,6 +22,7 @@ class Jogo {
             preco: this.preco,
             categoria: this.categoria,
             plataforma: this.plataforma
+
         })
 
         this.id = resultado.id
@@ -43,7 +44,7 @@ class Jogo {
 
     async atualizar() {
         await TabelaJogo.consultarPorId(this.id)
-        const campos = ['nome', 'categoria', 'plataforma']
+        const campos = ['nome', 'categoria']
         const dadosParaAtualizar = {}
 
         campos.forEach((campo) => {
@@ -69,7 +70,7 @@ class Jogo {
     }
 
     validar() {
-        const campos = ['nome', 'categoria', 'plataforma']
+        const campos = ['nome', 'categoria']
 
         campos.forEach(campo => {
             const valor = this[campo]

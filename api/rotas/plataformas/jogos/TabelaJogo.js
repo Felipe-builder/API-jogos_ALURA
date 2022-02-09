@@ -2,11 +2,16 @@ const Modelo = require('./ModeloTabelaJogo')
 const NaoEncontrado = require('../../../erros/NaoEncontrado')
 
 module.exports = {
-    listar () {
-        return Modelo.findAll({ raw: true })
+    listar (idPlataforma) {
+        return Modelo.findAll({
+                where: { 
+                    plataforma: idPlataforma
+                },
+            raw: true 
+        })
     },
-    inserir (jogo) {
-        return Modelo.create(jogo)
+    inserir (dados) {
+        return Modelo.create(dados)
     },
     async consultarPorId(id) {
         const encontrado = await Modelo.findOne({
