@@ -77,6 +77,16 @@ roteador.delete('/:id', async (req, res, proximo) => {
 })
 
 const roteadorJogos = require('./jogos')
-roteador.use('/:idPlataforma/jogos', roteadorJogos)
+const verificarPlataforma = async (req, res, proximo) => {
+    try {
+        const id = req.params.idPlataforma
+        const plataforma = new Plataforma({id: id})
+        await plataforma.carregar()
+        req.plataforma = plataforma
+    } catch (erro) {
+        proximo(erro)
+    }
+}
+roteador.use('/:idPlataforma/jogos', verificarPlataforma, roteadorJogos)
 
 module.exports = roteador

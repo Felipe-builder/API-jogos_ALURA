@@ -6,7 +6,7 @@ const SerializadorJogo = require('../../../Serializador').SerializadorJogo
 
 roteador.post('/', async (req, res, proximo) => {
     try {
-        const idPlataforma = req.params.idPlataforma
+        const idPlataforma = req.plataforma.id
         const dadosRecebidos = req.body
         const dados = Object.assign({}, dadosRecebidos, { plataforma: idPlataforma })
         const jogo = new Jogo(dados)
@@ -25,8 +25,7 @@ roteador.post('/', async (req, res, proximo) => {
 })
 
 roteador.get('/', async (req, res) => {
-    console.log(req.params.idPlataforma)
-    const resultados = await TabelaJogo.listar(req.params.idPlataforma)
+    const resultados = await TabelaJogo.listar(req.plataforma.id)
     res.status(200)
     const serializador = new SerializadorJogo(
         res.getHeader('Content-Type')
@@ -38,8 +37,11 @@ roteador.get('/', async (req, res) => {
 
 roteador.get('/:idJogo', async (req, res, proximo) => {
     try {
-        const id = req.params.idJogo
-        const jogo = new Jogo({ id: id})
+        const dados = {
+            id: req.params.idJogo,
+            plataforma: req.plataforma.id
+        }
+        const jogo = new Jogo(dados)
         await jogo.carregar()
         res.status(200)
         const serializador = new SerializadorJogo(
@@ -70,9 +72,12 @@ roteador.put('/:idJogo', async (req, res, proximo) => {
 
 roteador.delete('/:idJogo', async (req, res, proximo) => {
     try {
-        const id = req.params.idJogo
-        const jogo = new Jogo({id: id})
-        await TabelaJogo.consultarPorId(id)
+        const dados = {
+            id: req.params.idJogo,
+            plataforma: req.plataforma.id
+        }
+        const jogo = new Jogo(dados)
+        await TabelaJogo.consultarPorId(dados.id, dados.plataforma)
         await jogo.deletar()
         res.status(204)
         res.end()

@@ -13,10 +13,11 @@ module.exports = {
     inserir (dados) {
         return Modelo.create(dados)
     },
-    async consultarPorId(id) {
+    async consultarPorId(id, idPlataforma) {
         const encontrado = await Modelo.findOne({
             where: {
-                id: id
+                id: id,
+                plataforma: idPlataforma
             }
         })
 
@@ -34,10 +35,13 @@ module.exports = {
             }
         )
     },
-    deletar(id){
+    deletar(id, idPlataforma){
         return Modelo.destroy(
             {
-                where: {id: id}
+                where: {
+                    id: id,
+                    plataforma: idPlataforma
+                }
             }
         )
     }

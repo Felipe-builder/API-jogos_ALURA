@@ -32,11 +32,10 @@ class Jogo {
     }
 
     async carregar() {
-        const jogoEncontrado = await TabelaJogo.consultarPorId(this.id)
+        const jogoEncontrado = await TabelaJogo.consultarPorId(this.id, this.plataforma)
         this.nome = jogoEncontrado.nome
         this.preco = jogoEncontrado.preco
         this.categoria = jogoEncontrado.categoria
-        this.plataforma = jogoEncontrado.plataforma
         this.dtCriacao = jogoEncontrado.dtCriacao
         this.dtAtualizacao = jogoEncontrado.dtAtualizacao
         this.versao = jogoEncontrado.versao
@@ -66,7 +65,7 @@ class Jogo {
     }
 
     deletar(){
-        return TabelaJogo.deletar(this.id)
+        return TabelaJogo.deletar(this.id, this.plataforma)
     }
 
     validar() {
