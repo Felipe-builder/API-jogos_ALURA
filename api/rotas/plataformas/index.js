@@ -1,11 +1,15 @@
 const roteador = require('express').Router()
 const TabelaPlataforma = require('./TabelaPlataforma')
 const Plataforma = require('./Plataforma')
+const SerializadorPlataforma = require('../../Serializador').SerializadorPlataforma
 
 roteador.get('/', async (req, res) => {
     const plataformas = await TabelaPlataforma.listar();
+    const serializador = new SerializadorPlataforma(
+        res.getHeader('Content-Type')
+    )
     res.send(
-        JSON.stringify(plataformas)
+        serializador.serializar(plataformas)
     )
 })
 
@@ -14,9 +18,13 @@ roteador.post('/', async (req, res, proximo) => {
         const dadosRecebidos = req.body
         const plataforma = new Plataforma(dadosRecebidos)
         await plataforma.criar()
+        const serializador = new SerializadorPlataforma(
+            res.getHeader('Content-Type'),
+            [ 'dtCriacao', 'dtAtualizacao', 'versao' ]
+        )
         res.status(201)
         res.send(
-            JSON.stringify(plataforma)
+            serializador.serializar(plataforma)
         )
     } catch(erro) {
         proximo(erro)
@@ -29,8 +37,12 @@ roteador.get('/:id', async (req, res, proximo) => {
         const plataforma = new Plataforma({id: id})
         await plataforma.carregar()
         res.status(200)
+        const serializador = new SerializadorPlataforma(
+            res.getHeader('Content-Type'),
+            ['site', 'dtCriacao', 'dtAtualizacao', 'versao']
+        )
         res.send(
-            JSON.stringify(plataforma)
+            serializador.serializar(plataforma)
         )
     } catch(erro) {
         proximo(erro)

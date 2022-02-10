@@ -83,6 +83,20 @@ class SerializadorJogo extends Serializador {
     }
 }
 
+class SerializadorPlataforma extends Serializador {
+    constructor(contentType, camposExtras){
+        super()
+        this.contentType = contentType
+        this.camposPublicos = [
+            'id',
+            'nome',
+            'sites'
+        ].concat(camposExtras || [])
+        this.tagSingular = 'plataforma'
+        this.tagPlural = 'plataformas'
+    }
+}
+
 class SerializadorErro extends Serializador {
     constructor(contentType, camposExtras){
         super()
@@ -100,6 +114,7 @@ module.exports = {
     Serializador: Serializador,
     SerializadorUsuario: SerializadorUsuario,
     SerializadorJogo: SerializadorJogo,
+    SerializadorPlataforma: SerializadorPlataforma,
     SerializadorErro: SerializadorErro,
     formatosAceitos: ['application/json', 'application/xml']
 }
