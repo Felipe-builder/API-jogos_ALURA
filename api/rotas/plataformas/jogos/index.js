@@ -24,14 +24,18 @@ roteador.post('/', async (req, res, proximo) => {
     }
 })
 
+
+
 roteador.get('/', async (req, res) => {
-    const resultados = await TabelaJogo.listar(req.plataforma.id)
+    console.log(req.plataforma.id)
+    const resultados = await TabelaJogo.listar(req.params.idPlataforma)
     res.status(200)
+
     const serializador = new SerializadorJogo(
         res.getHeader('Content-Type')
     )
     res.send(
-        serializador.serializar(resultados)
+        JSON.stringify(resultados)
     )
 })
 
@@ -58,9 +62,16 @@ roteador.get('/:idJogo', async (req, res, proximo) => {
 
 roteador.put('/:idJogo', async (req, res, proximo) => {
     try {
-        const id = req.params.idJogo
+        const dados = Object.assign(
+            {},
+            {
+                id: req.params.idJogo,
+                plataforma: req.plataforma.id
+            },
+            req.body
+        )
         const dadosRecebidos = req.body
-        const dados = Object.assign({}, dadosRecebidos, { id: id})
+        // const dados = Object.assign({}, dadosRecebidos, { id: id})
         const jogo = new Jogo(dados)
         await jogo.atualizar()
         res.status(204)

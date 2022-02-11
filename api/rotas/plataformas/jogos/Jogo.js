@@ -42,7 +42,7 @@ class Jogo {
     }
 
     async atualizar() {
-        await TabelaJogo.consultarPorId(this.id)
+        await TabelaJogo.consultarPorId(this.id, this.plataforma)
         const campos = ['nome', 'categoria']
         const dadosParaAtualizar = {}
 
@@ -61,7 +61,7 @@ class Jogo {
             throw new DadosNaoFornecidos()
         }
 
-        await TabelaJogo.atualizar(this.id, dadosParaAtualizar)
+        await TabelaJogo.atualizar(this.id, this.plataforma, dadosParaAtualizar)
     }
 
     deletar(){
