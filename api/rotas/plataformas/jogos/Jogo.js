@@ -61,7 +61,12 @@ class Jogo {
             throw new DadosNaoFornecidos()
         }
 
-        await TabelaJogo.atualizar(this.id, this.plataforma, dadosParaAtualizar)
+        await TabelaJogo.atualizar(
+            {
+                id: this.id,
+                plataforma: this.plataforma
+            }, dadosParaAtualizar
+        )
     }
 
     deletar(){

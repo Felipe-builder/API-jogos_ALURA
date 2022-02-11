@@ -83,6 +83,7 @@ const verificarPlataforma = async (req, res, proximo) => {
         const plataforma = new Plataforma({id: id})
         await plataforma.carregar()
         req.plataforma = plataforma
+        proximo()
     } catch (erro) {
         proximo(erro)
     }

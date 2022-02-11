@@ -35,7 +35,7 @@ roteador.get('/', async (req, res) => {
         res.getHeader('Content-Type')
     )
     res.send(
-        JSON.stringify(resultados)
+        serializador.serializar(resultados)
     )
 })
 
@@ -64,14 +64,12 @@ roteador.put('/:idJogo', async (req, res, proximo) => {
     try {
         const dados = Object.assign(
             {},
+            req.body,
             {
                 id: req.params.idJogo,
                 plataforma: req.plataforma.id
-            },
-            req.body
+            }
         )
-        const dadosRecebidos = req.body
-        // const dados = Object.assign({}, dadosRecebidos, { id: id})
         const jogo = new Jogo(dados)
         await jogo.atualizar()
         res.status(204)

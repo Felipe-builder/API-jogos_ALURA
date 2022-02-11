@@ -27,14 +27,11 @@ module.exports = {
 
         return encontrado
     },
-    atualizar (id, idPlataforma, dadosParaAtualizar) {
+    atualizar (dadosDoJogo, dadosParaAtualizar) {
         return Modelo.update(
             dadosParaAtualizar,
             {
-                where: {
-                    id: id,
-                    plataforma: idPlataforma
-                }
+                where: dadosDoJogo
             }
         )
     },
