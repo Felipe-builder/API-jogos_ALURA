@@ -13,6 +13,10 @@ usuariosRoteador.post('/', async (req, res, proximo) => {
             res.getHeader('Content-Type'),
             [ 'saldo', 'dtCriacao', 'dtAtualizacao', 'versao' ]
         )
+        res.set('Etag', usuario.versao)
+        const timestamp = (new Date(usuario.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
+        res.set('Location', `api/usuarios/${usuario.id}`)
         res.send(
             serializador.serializar(usuario)
         )
@@ -42,6 +46,9 @@ usuariosRoteador.get('/:idUsuario', async (req, res, proximo) => {
             res.getHeader('Content-Type'),
             [ 'saldo', 'dtCriacao', 'dtAtualizacao', 'versao' ]
         )
+        res.set('Etag', usuario.versao)
+        const timestamp = (new Date(usuario.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
         res.send(
             serializador.serializar(usuario)
         )
@@ -57,6 +64,9 @@ usuariosRoteador.put('/:idUsuario', async (req, res, proximo) => {
         const dados = Object.assign({}, dadosRecebidos, {id: id})
         const usuario = new Usuario(dados)
         await usuario.atualizar()
+        res.set('Etag', usuario.versao)
+        const timestamp = (new Date(usuario.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
         res.status(204)
         res.end()
     } catch (erro) {

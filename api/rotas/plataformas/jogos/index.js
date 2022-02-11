@@ -16,8 +16,12 @@ roteador.post('/', async (req, res, proximo) => {
             res.getHeader('Content-Type'), 
             [ 'categoria', 'plataforma', 'dtCriacao', 'dtAtualizacao', 'versao' ]
         )
+        res.set('Etag', jogo.versao)
+        const timestamp = (new Date(jogo.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
+        res.set('Location', `/api/plataformas/${jogo.plataforma}/jogos/${jogo.id}`)
         res.send(
-            JSON.stringify(jogo)
+            serializador.serializar(jogo)
         )
     } catch (erro) {
         proximo(erro)
@@ -52,6 +56,9 @@ roteador.get('/:idJogo', async (req, res, proximo) => {
             res.getHeader('Content-Type'), 
             [ 'categoria', 'plataforma', 'dtCriacao', 'dtAtualizacao', 'versao' ]
         )
+        res.set('Etag', jogo.versao)
+        const timestamp = (new Date(jogo.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
         res.send(
             serializador.serializar(jogo)
         )
@@ -72,6 +79,10 @@ roteador.put('/:idJogo', async (req, res, proximo) => {
         )
         const jogo = new Jogo(dados)
         await jogo.atualizar()
+        await jogo.carregar()
+        res.set('Etag', jogo.versao)
+        const timestamp = (new Date(jogo.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
         res.status(204)
         res.end()
     } catch (erro) {

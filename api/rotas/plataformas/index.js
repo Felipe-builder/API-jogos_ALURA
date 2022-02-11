@@ -22,6 +22,10 @@ roteador.post('/', async (req, res, proximo) => {
             res.getHeader('Content-Type'),
             [ 'dtCriacao', 'dtAtualizacao', 'versao' ]
         )
+        res.set('Etag', plataforma.versao)
+        const timestamp = (new Date(plataforma.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
+        res.set('Location', `/api/plataformas/${plataforma.id}`)
         res.status(201)
         res.send(
             serializador.serializar(plataforma)
@@ -41,6 +45,9 @@ roteador.get('/:id', async (req, res, proximo) => {
             res.getHeader('Content-Type'),
             ['site', 'dtCriacao', 'dtAtualizacao', 'versao']
         )
+        res.set('Etag', plataforma.versao)
+        const timestamp = (new Date(plataforma.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
         res.send(
             serializador.serializar(plataforma)
         )
@@ -56,6 +63,10 @@ roteador.put('/:id', async (req, res, proximo) => {
         const dados = Object.assign({}, dadosRecebidos, { id: id })
         const plataforma = new Plataforma(dados)
         await plataforma.atualizar()
+        await plataforma.carregar()
+        res.set('Etag', plataforma.versao)
+        const timestamp = (new Date(plataforma.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
         res.status(204)
         res.end()
     } catch (erro) {
