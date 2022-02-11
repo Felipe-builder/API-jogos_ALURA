@@ -56,6 +56,26 @@ roteador.get('/:id', async (req, res, proximo) => {
     }
 })
 
+roteador.head('/:id', async (req, res, proximo) => {
+    try {
+        const id = req.params.id
+        const plataforma = new Plataforma({id: id})
+        await plataforma.carregar()
+        res.status(200)
+        const serializador = new SerializadorPlataforma(
+            res.getHeader('Content-Type'),
+            ['site', 'dtCriacao', 'dtAtualizacao', 'versao']
+        )
+        res.set('Etag', plataforma.versao)
+        const timestamp = (new Date(plataforma.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
+        res.status(200)
+        res.end()
+    } catch(erro) {
+        proximo(erro)
+    }
+})
+
 roteador.put('/:id', async (req, res, proximo) => {
     try {
         const id = req.params.id

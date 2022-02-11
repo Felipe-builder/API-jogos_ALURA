@@ -57,6 +57,21 @@ usuariosRoteador.get('/:idUsuario', async (req, res, proximo) => {
     }
 })
 
+usuariosRoteador.head('/:idUsuario', async (req, res, proximo) => {
+    try {
+        const id = req.params.idUsuario
+        const usuario = new Usuario(id)
+        await usuario.consultarPorId()
+        res.set('Etag', usuario.versao)
+        const timestamp = (new Date(usuario.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
+        res.status(200)        
+        res.end()
+    } catch(erro) {
+        proximo(erro)
+    }
+})
+
 usuariosRoteador.put('/:idUsuario', async (req, res, proximo) => {
     try {
         const id = req.params.idUsuario

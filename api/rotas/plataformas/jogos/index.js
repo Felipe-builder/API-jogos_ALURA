@@ -67,6 +67,29 @@ roteador.get('/:idJogo', async (req, res, proximo) => {
     }
 })
 
+roteador.get('/:idJogo', async (req, res, proximo) => {
+    try {
+        const dados = {
+            id: req.params.idJogo,
+            plataforma: req.plataforma.id
+        }
+        const jogo = new Jogo(dados)
+        await jogo.carregar()
+        res.status(200)
+        const serializador = new SerializadorJogo(
+            res.getHeader('Content-Type'), 
+            [ 'categoria', 'plataforma', 'dtCriacao', 'dtAtualizacao', 'versao' ]
+        )
+        res.set('Etag', jogo.versao)
+        const timestamp = (new Date(jogo.dtAtualizacao)).getTime()
+        res.set('Last-Modified', timestamp)
+        res.status(200)
+        res.end()
+    } catch (erro) {
+        proximo(erro)
+    }
+})
+
 roteador.put('/:idJogo', async (req, res, proximo) => {
     try {
         const dados = Object.assign(
